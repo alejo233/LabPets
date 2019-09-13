@@ -6,11 +6,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+
+import exceptions.ClubAlreadyRegisteredException;
+
+
+
 public class Principal implements Comparator<Object>{
  private ArrayList<Club>club;
 
-	public Principal(ArrayList<Club> club) {
-		this.club = club;
+	public Principal() {
+		club=new ArrayList<Club>();
 	}
 	
 	
@@ -145,6 +150,55 @@ public class Principal implements Comparator<Object>{
       }
       
       
+      public boolean alreadyExist(String name) {
+  		boolean yes = false;
+  		int start = 0;
+  		int end = club.size() - 1;
+  		while (start <= end && !yes) {
+  			int means = (start + end) / 2;
+  			if (club.get(means).getName().equalsIgnoreCase(name)) {
+  				yes = true;
+  			} else if (club.get(means).getName().compareToIgnoreCase(name) < 0) {
+  				start = means + 1;
+  			} else {
+  				end = means - 1;
+  			}
+  		}
+  		return yes;
+  	}
+      
+  	public void addClub(Club c) throws ClubAlreadyRegisteredException  {
+		if (alreadyExist(c.getIdClub())) {
+			throw new ClubAlreadyRegisteredException();
+		} else {
+			club.add(c);
+		}
+	}
+  	
+  	public Club buscarClub(String id) {
+		Club result = null;
+		Club expected = new Club(id,"Club1","12/10/65","Dog");
+		boolean yes = false;
+		int start = 0;
+		int end = club.size() - 1;
+		while (start <= end && !yes) {
+			int means = (start + end) / 2;
+			if (club.get(means).getIdClub().equalsIgnoreCase(id)) {
+				yes = true;
+				result = club.get(means);
+			} else if (compare3(club.get(means),expected) < 0) {
+				start = means + 1;
+			} else {
+				end = means - 1;
+			}
+		}
+		return result;
+	}
+
+
+
+
+
 
 
 	   
